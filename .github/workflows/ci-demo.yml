@@ -1,0 +1,30 @@
+name: CI/CD Minikube local
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: self-hosted   # Runner installé sur ton PC Windows
+
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: Construire l'image Docker
+        run: docker build -t monnginx:latest .
+
+      - name: Charger l'image dans Minikube
+        run: minikube image load monnginx:latest
+
+      - name: Appliquer les manifests Kubernetes
+        run: kubectl apply -f manifests/
+
+      - name: Vérifier le rollout
+        run: kubectl rollout status deployment/my-deployment
+
+      - name: Vérifier les ressources
+        run: |
+          kubectl get pods -o wide
+          kubectl get svc -o wide

@@ -1,4 +1,8 @@
+# Image de base Nginx
 FROM nginx:latest
-COPY ../index.html /usr/share/nginx/html/index.html
+
+# Copier un fichier HTML simple
+COPY index.html /usr/share/nginx/html/index.html
+
+# Exposer le port 80
 EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
